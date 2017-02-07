@@ -10,7 +10,7 @@ let path = require('path'),
 const DEFAULT_OPTIONS = {
 	type: 'patch',
 	cwd: process.cwd(),
-	publishNpm: false
+	npmPublish: false
 };
 
 const SUPORTED_FILES = ['package.json', 'bower.json'];
@@ -35,7 +35,7 @@ function release(options) {
 
 	return npm.version(releaseVersion)
 		.then(() => {
-			if (options.publishNpm) {
+			if (options.npmPublish) {
 				return npm.publish();
 			}
 		})
