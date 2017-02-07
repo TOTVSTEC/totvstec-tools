@@ -16,6 +16,14 @@
   ],
   "author": "Rogerio Ribeiro da Cruz",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TOTVSTEC/totvstec-tools.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TOTVSTEC/totvstec-tools/issues"
+  },
+  "homepage": "https://github.com/TOTVSTEC/totvstec-tools#readme",
   "dependencies": {
     "commander": "^2.9.0",
     "minimist": "^1.2.0",
