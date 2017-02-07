@@ -4,8 +4,7 @@
   "description": "TOTVS Technology build tools",
   "main": "src/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "release": "node ./src/totvstec-release.js --npm"
+    "release": "node ./src/main.js -- release --npm-publish"
   },
   "bin": {
     "totvstec": "src/main.js"

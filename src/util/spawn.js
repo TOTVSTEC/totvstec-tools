@@ -1,13 +1,13 @@
 'use strict';
 
-var Q = require('q'),
+let Q = require('q'),
 	child_process = require('child_process');
 
 module.exports = function spawn(command, args, options) {
-	var deferred = Q.defer();
-	var child = child_process.spawn(command, args, options);
-	var capturedOut = '';
-	var capturedErr = '';
+	let deferred = Q.defer(),
+		child = child_process.spawn(command, args, options),
+		capturedOut = '',
+		capturedErr = '';
 
 	if (child.stdout) {
 		child.stdout.on('data', function(data) {
@@ -30,17 +30,17 @@ module.exports = function spawn(command, args, options) {
 		child.removeListener('close', whenDone);
 		child.removeListener('error', whenDone);
 
-		var code = typeof arg == 'number' ? arg : arg && arg.code;
+		let code = typeof arg == 'number' ? arg : arg && arg.code;
 
 		if (code === 0) {
 			deferred.resolve(capturedOut.trim());
 		}
 		else {
-			var errMsg = command + ': Command failed with exit code ' + code;
+			let errMsg = command + ': Command failed with exit code ' + code;
 			if (capturedErr) {
 				errMsg += ' Error output:\n' + capturedErr.trim();
 			}
-			var err = new Error(errMsg);
+			let err = new Error(errMsg);
 			err.code = code;
 			err.stdout = capturedOut;
 			err.stderr = capturedErr;

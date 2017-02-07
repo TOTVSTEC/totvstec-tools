@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-var program = require('commander'),
+let program = require('commander'),
 	pkg = require('./../package.json'),
 	programName = require('./util/program-name');
 
@@ -28,11 +28,11 @@ program.parse(process.argv);
 /*
 process.title = 'cloudbridge';
 
-var argv = require('minimist')(process.argv.slice(2));
+let argv = require('minimist')(process.argv.slice(2));
 
 if (argv._.length > 1) {
 	if ((argv._[0] === 'android') && (argv._[1] === 'aar')) {
-		var generator = require('./generate_aar');
+		let generator = require('./generate_aar');
 
 		generator(argv);
 	}

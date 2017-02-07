@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-var program = require('commander'),
+let program = require('commander'),
 	pkg = require('./../package.json'),
 	programName = require('./util/program-name');
 

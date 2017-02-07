@@ -1,24 +1,19 @@
 'use strict';
 
-let spawn = require('./spawn'),
-	shelljs = require('shelljs');
-
-const npmExe = shelljs.which('npm').stdout;
+let cli = require('./cli');
 
 class NPM {
 
-	static version(newVersion, options) {
-		var promise = spawn(npmExe, ['version', newVersion], options);
+	static version(value, flags, options) {
+		let args = ['npm', 'version', value];
 
-		promise.progress((data) => {
-			if (data.stdout)
-				console.log(data.stdout.toString('utf8'));
+		return cli.execCommand(args, flags, options);
+	}
 
-			if (data.stderr)
-				console.error(data.stderr.toString('utf8'));
-		});
+	static publish(flags, options) {
+		let args = ['npm', 'publish'];
 
-		return promise;
+		return cli.execCommand(args, flags, options);
 	}
 
 }

@@ -12,6 +12,7 @@ const DEFAULT_OPTIONS = {
 	cwd: process.cwd(),
 	publishNpm: false
 };
+
 const SUPORTED_FILES = ['package.json', 'bower.json'];
 
 function release(options) {
@@ -73,7 +74,7 @@ function readFiles(cwd, files) {
 function checkFiles(files) {
 	let first = version.read(files[0]);
 
-	for (var i = 1; i < files.length; i++) {
+	for (let i = 1; i < files.length; i++) {
 		let current = version.read(files[i]);
 
 		if (current !== first) {
