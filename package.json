@@ -1,6 +1,6 @@
 {
   "name": "totvstec-tools",
-  "version": "1.0.1",
+  "version": "1.0.2-SNAPSHOT",
   "description": "TOTVS Technology build tools",
   "main": "src/main.js",
   "scripts": {
