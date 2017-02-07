@@ -1,0 +1,13 @@
+node_modules/
+.vscode/
+coverage/
+build/
+test/
+spec/
+.editorconfig
+.gitignore
+.jscsrc
+.jshintrc
+.npmignore
+.vscodeignore
+jsconfig.json
