@@ -1,25 +1,39 @@
 'use strict';
 
-module.exports = function generate_aar(argv) {
-	var fs = require('fs'),
-		shelljs = require('shelljs'),
-		path = require('path'),
-		exec = require('child_process').exec,
-		directory = null,
-		BEGIN_QT = '<!-- BEGIN:QT_METADATA -->',
-		END_QT = '<!-- END:QT_METADATA -->';
+let fs = require('fs'),
+	shelljs = require('shelljs'),
+	Q = require('q'),
+	path = require('path'),
+	spawn = require('./util/spawn'),
+	directory;
 
-	if (argv._.length > 2) {
-		if (fs.existsSync(argv._[2])) {
-			directory = path.resolve(argv._[2]);
+const DEFAULT_OPTIONS = {
+	target: process.cwd()
+};
+
+const BEGIN_QT = '<!-- BEGIN:QT_METADATA -->';
+const END_QT = '<!-- END:QT_METADATA -->';
+
+module.exports = function generate_aar(options) {
+	options = Object.assign({}, DEFAULT_OPTIONS, options);
+
+	directory = options.target;
+
+	if (fs.existsSync(directory)) {
+		directory = path.resolve(directory);
+		let androidBuild = path.join(directory, 'android-build');
+
+		if (fs.existsSync(androidBuild)) {
+			directory = androidBuild;
 		}
 	}
 
-	if (directory === null) {
-		directory = process.cwd();
-	}
-	directory += path.sep;
+	return prepare()
+		.then(() => build())
+		.then(() => copy());
+};
 
+function prepare() {
 	var content = fs.readFileSync(path.join(directory, 'AndroidManifest.xml'), { encoding: 'utf8' });
 	var patt = new RegExp(BEGIN_QT + '((.|\n|\r)*?)' + END_QT, "gm");
 	var qtMeta = patt.exec(content);
@@ -51,22 +65,52 @@ module.exports = function generate_aar(argv) {
 	shelljs.rm('-rf', path.join(directory, 'assets', 'smartclient.ini'));
 	shelljs.rm('-rf', path.join(directory, 'assets', '*.rpo'));
 
-	exec(path.join(directory, 'gradlew') + ' -b build.aar.gradle clean build', { cwd: directory }, function(error, stdout, stderr) {
-		if (error) {
-			console.error('exec error: ' + error + '\n');
-			return;
-		}
-		console.log('stdout: ' + stdout + '\n');
-		console.log('stderr: ' + stderr + '\n');
+	return Q();
+}
 
-		var src = path.join(directory, 'build', 'outputs', 'aar');
+function build() {
+	let	command,
+		args = [],
+		options = {
+			cwd: directory,
+			stdio: ['ignore', 'pipe', 'pipe']
+		},
+		proc;
 
-		shelljs.cp('-Rf',
-			path.join(src, 'android-build-debug.aar'),
-			path.join(directory, 'com.totvs.smartclient-DEBUG.aar'));
+	if (process.platform === 'win32') {
+		command = 'cmd.exe';
+		args = args.concat(['/c', 'gradlew.bat']);
+	}
+	else {
+		command = './gradlew';
+	}
 
-		shelljs.cp('-Rf',
-			path.join(src, 'android-build-release.aar'),
-			path.join(directory, 'com.totvs.smartclient.aar'));
-	});
-};
+	args = args.concat(['-b', 'build.aar.gradle', 'clean', 'build']);
+
+	return spawn(command, args, options)
+		.progress((data) => {
+			maybeWrite(data.stdout, 'log');
+			maybeWrite(data.stderr, 'error');
+		});
+}
+
+function maybeWrite(buffer, target) {
+	if (buffer) {
+		let out = buffer.toString('utf8');
+
+		if (out.trim())
+			console[target](out);
+	}
+}
+
+function copy() {
+	var src = path.join(directory, 'build', 'outputs', 'aar');
+
+	shelljs.cp('-Rf',
+		path.join(src, 'android-build-debug.aar'),
+		path.join(directory, 'com.totvs.smartclient-DEBUG.aar'));
+
+	shelljs.cp('-Rf',
+		path.join(src, 'android-build-release.aar'),
+		path.join(directory, 'com.totvs.smartclient.aar'));
+}
