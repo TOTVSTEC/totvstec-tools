@@ -11,7 +11,9 @@ class CliUtils {
 			parsedFlags = CliUtils.parseFlags(flags),
 			command = args.concat(parsedFlags).join(' ');
 
-		shelljs.exec(command, (code, stdout, stderr) => {
+		//console.log(command);
+
+		shelljs.exec(command, options, (code, stdout, stderr) => {
 			if (code) {
 				return deferred.reject(code);
 			}
@@ -24,10 +26,10 @@ class CliUtils {
 
 	static parseFlags(args) {
 		return Object.keys(args || {}).map((key, index, array) => {
-			let value = '--' + key;
+			let value = key.length === 1 ? ('-' + key) : ('--' + key);
 
 			if (args[key] !== true)
-				value += '=' + args[key];
+				value += ' ' + args[key];
 
 			return value;
 		});
