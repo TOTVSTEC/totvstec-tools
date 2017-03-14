@@ -4,7 +4,7 @@ let fs = require('fs'),
 	shelljs = require('shelljs'),
 	Q = require('q'),
 	path = require('path'),
-	spawn = require('./util/spawn'),
+	spawn = require('../util/spawn'),
 	directory;
 
 const DEFAULT_OPTIONS = {

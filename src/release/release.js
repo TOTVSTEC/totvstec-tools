@@ -3,9 +3,9 @@
 let path = require('path'),
 	Q = require('q'),
 	shelljs = require('shelljs'),
-	git = require('./util/git'),
-	npm = require('./util/npm'),
-	version = require('./util/version');
+	git = require('../util/git'),
+	npm = require('../util/npm'),
+	version = require('../util/version');
 
 const DEFAULT_OPTIONS = {
 	type: 'patch',
