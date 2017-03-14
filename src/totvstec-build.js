@@ -2,10 +2,7 @@
 'use strict';
 
 let program = require('commander'),
-	pkg = require('./../package.json'),
-	programName = require('./util/program-name');
-
-process.title = program._name = programName(__filename);
+	pkg = require('./../package.json');
 
 program
 	.option('-t, --target', 'Target platform')
@@ -15,7 +12,7 @@ program.parse(process.argv);
 
 
 if (program.aar) {
-	var generate_aar = require('./generate_aar'),
+	var generate_aar = require('./build/generate_aar'),
 		options = {};
 
 	//if (program.target) {

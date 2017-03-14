@@ -2,11 +2,8 @@
 'use strict';
 
 let program = require('commander'),
-	programName = require('./util/program-name'),
-	release = require('./release'),
+	release = require('./release/release'),
 	version = require('./util/version');
-
-process.title = program._name = programName(__filename);
 
 program
 	.arguments('[version]')

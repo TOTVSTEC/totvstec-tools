@@ -4,10 +4,10 @@
   "description": "TOTVS Technology build tools",
   "main": "src/index.js",
   "scripts": {
-    "release": "node ./src/main.js -- release --npm-publish"
+    "release": "node ./src/totvstec.js -- release --npm-publish"
   },
   "bin": {
-    "totvstec": "src/main.js"
+    "totvstec": "src/totvstec.js"
   },
   "keywords": [
     "totvs",
