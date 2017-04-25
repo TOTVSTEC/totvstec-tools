@@ -46,7 +46,8 @@ function prepare() {
 		fs.writeFileSync(path.join(directory, 'qt_metadata.txt'), temp);
 	}
 
-	temp = content.replace(/<application(.|\n|\r)*?<\/application>/gm, '');
+	//temp = content.replace(/<application(.|\n|\r)*?<\/application>/gm, '');
+	temp = content.replace(/(<manifest(?:.|\n|\r)*?>)(.|\n|\r)+(<\/manifest>)/igm, '$1\n$3');
 
 	fs.writeFileSync(path.join(directory, 'AndroidManifest.aar.xml'), temp);
 
@@ -69,7 +70,7 @@ function prepare() {
 }
 
 function build() {
-	let	command,
+	let command,
 		args = [],
 		options = {
 			cwd: directory,
